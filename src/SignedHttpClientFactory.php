@@ -8,10 +8,7 @@ use GuzzleHttp\HandlerStack;
 
 class SignedHttpClientFactory
 {
-    /**
-     * @var HmacAuthMiddleware
-     */
-    private $hmacAuthMiddleware;
+    private HmacAuthMiddleware $hmacAuthMiddleware;
 
 
     public function __construct(HmacAuthMiddleware $hmacAuthMiddleware)

@@ -10,15 +10,9 @@ use Psr\Http\Message\ResponseInterface;
 
 class HmacResponseSigner
 {
-    /**
-     * @var string
-     */
-    private $keyId;
+    private string $keyId;
 
-    /**
-     * @var string
-     */
-    private $keySecret;
+    private string $keySecret;
 
 
     public function __construct(string $keyId, string $keySecret)

@@ -9,20 +9,14 @@ use Closure;
 
 class HmacRequestSignerMiddleware
 {
-    /**
-     * @var string
-     */
-    private $realm;
+    private string $realm;
 
-    /**
-     * @var KeyInterface|null
-     */
-    private $key;
+    private ?KeyInterface $key = null;
 
     /**
      * @var string[][]
      */
-    private $customHeaders;
+    private array $customHeaders;
 
 
     /**
@@ -39,9 +33,7 @@ class HmacRequestSignerMiddleware
     public function __invoke(callable $handler): Closure
     {
         if ($this->key === null) {
-            return function ($request, array $options) use ($handler) {
-                return $handler($request, $options);
-            };
+            return fn($request, array $options) => $handler($request, $options);
         }
 
         $hmacAuthMiddleware = new HmacAuthMiddleware($this->key, $this->realm, $this->customHeaders);
