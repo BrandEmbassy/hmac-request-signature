@@ -8,15 +8,21 @@
         }
     },
     "require": {
-        "acquia/http-hmac-php": "^4.0",
+        "php": "^7.4 || ^8.1",
+        "acquia/http-hmac-php": "^6.0",
         "guzzlehttp/guzzle": "^6.3"
     },
     "require-dev": {
-        "brandembassy/coding-standard": "^5.2"
+        "brandembassy/coding-standard": "^9.0"
     },
     "scripts": {
         "phpcs": "./vendor/bin/phpcs --standard=BrandEmbassyCodingStandard src",
         "phpcbf": "./vendor/bin/phpcbf --standard=BrandEmbassyCodingStandard src",
         "phpstan": "./vendor/bin/phpstan analyze -c phpstan.neon src"
+    },
+    "config": {
+        "allow-plugins": {
+            "dealerdirect/phpcodesniffer-composer-installer": true
+        }
     }
 }
