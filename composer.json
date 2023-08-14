@@ -10,7 +10,7 @@
     "require": {
         "php": "^7.4 || ^8.1",
         "acquia/http-hmac-php": "^6.0",
-        "guzzlehttp/guzzle": "^6.3"
+        "guzzlehttp/guzzle": "^6.3 || ^7.0"
     },
     "require-dev": {
         "brandembassy/coding-standard": "^9.0"
