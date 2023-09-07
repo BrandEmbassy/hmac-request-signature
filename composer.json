@@ -11,13 +11,21 @@
         "guzzlehttp/guzzle": "^6.3"
     },
     "require-dev": {
-        "brandembassy/coding-standard": "^8.1",
-        "phpunit/phpunit": "^8.5"
+        "brandembassy/coding-standard": "^10.0",
+        "phpunit/phpunit": "^9.6",
+        "roave/security-advisories": "dev-latest"
     },
     "scripts": {
-        "phpcs": "./vendor/bin/phpcs --standard=BrandEmbassyCodingStandard src",
-        "phpcbf": "./vendor/bin/phpcbf --standard=BrandEmbassyCodingStandard src",
+        "check-cs": "vendor/bin/ecs check --ansi",
+        "fix-cs": "vendor/bin/ecs check --fix --ansi",
         "phpstan": "./vendor/bin/phpstan analyze -c phpstan.neon src",
         "phpunit": "./vendor/bin/phpunit src --no-coverage"
+    },
+    "config": {
+        "allow-plugins": {
+            "dealerdirect/phpcodesniffer-composer-installer": true
+        },
+        "sort-packages": true,
+        "process-timeout": 1200
     }
 }

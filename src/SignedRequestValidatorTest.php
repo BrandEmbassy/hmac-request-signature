@@ -89,6 +89,9 @@ final class SignedRequestValidatorTest extends TestCase
         $body = $request->getBody();
         $body->write(self::REQUEST_BODY);
 
-        return $request->withBody($body);
+        $requestWithBody = $request->withBody($body);
+        assert($requestWithBody instanceof RequestInterface);
+
+        return $requestWithBody;
     }
 }
