@@ -40,7 +40,7 @@ final class RequestSignerMiddlewareTest extends TestCase
 
 
     /**
-     * @return RequestInterface[][]|string[][]
+     * @return array<string, array{request: RequestInterface, expectedSignature: string}>
      */
     public function requestDataProvider(): array
     {
@@ -64,6 +64,9 @@ final class RequestSignerMiddlewareTest extends TestCase
         $body = $request->getBody();
         $body->write($requestBody);
 
-        return $request->withBody($body);
+        $requestWithBody = $request->withBody($body);
+        assert($requestWithBody instanceof RequestInterface);
+
+        return $requestWithBody;
     }
 }

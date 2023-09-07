@@ -3,6 +3,7 @@
 namespace BrandEmbassy\HmacRequestSignature;
 
 use GuzzleHttp\Promise\PromiseInterface;
+use Psr\Http\Message\MessageInterface;
 use Psr\Http\Message\RequestInterface;
 
 final class RequestSignerMiddleware
@@ -46,14 +47,14 @@ final class RequestSignerMiddleware
     public function __invoke(callable $handler): callable
     {
         return function (RequestInterface $request, array $options) use ($handler): PromiseInterface {
-            $request = $this->signRequest($request);
+            $signedRequest = $this->signRequest($request);
 
-            return $handler($request, $options);
+            return $handler($signedRequest, $options);
         };
     }
 
 
-    private function signRequest(RequestInterface $request): RequestInterface
+    private function signRequest(RequestInterface $request): MessageInterface
     {
         $sign = RequestBodyEncoder::encode($request, $this->secretKey, $this->hashAlgorithm);
 
