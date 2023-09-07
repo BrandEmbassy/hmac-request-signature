@@ -8,10 +8,10 @@
         }
     },
     "require": {
-        "guzzlehttp/guzzle": "^6.5.8"
+        "guzzlehttp/guzzle": "^6.3"
     },
     "require-dev": {
-        "brandembassy/coding-standard": "^10.0",
+        "brandembassy/coding-standard": "^10.1",
         "phpunit/phpunit": "^9.6",
         "roave/security-advisories": "dev-latest"
     },
