@@ -11,7 +11,7 @@
         "guzzlehttp/guzzle": "^6.3"
     },
     "require-dev": {
-        "brandembassy/coding-standard": "^10.1",
+        "brandembassy/coding-standard": "^10.0",
         "phpunit/phpunit": "^9.6",
         "roave/security-advisories": "dev-latest"
     },
