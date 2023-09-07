@@ -11,7 +11,7 @@ jobs:
         php-version:
           - 7.4
         composer-arg:
-          - install
+          - update --prefer-lowest
 
     steps:
       - name: Checkout
