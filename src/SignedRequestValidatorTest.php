@@ -3,8 +3,11 @@
 namespace BrandEmbassy\HmacRequestSignature;
 
 use GuzzleHttp\Psr7\ServerRequest;
+use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\TestCase;
+use Psr\Http\Message\MessageInterface;
 use Psr\Http\Message\RequestInterface;
+use Throwable;
 
 final class SignedRequestValidatorTest extends TestCase
 {
@@ -12,6 +15,9 @@ final class SignedRequestValidatorTest extends TestCase
     private const SECRET_KEY = 'thisIsSecretKey';
 
 
+    /**
+     * @throws Throwable
+     */
     public function testSignatureMatch(): void
     {
         $this->expectNotToPerformAssertions();
@@ -23,6 +29,8 @@ final class SignedRequestValidatorTest extends TestCase
                 'X-Signature-Algorithm' => 'sha256',
             ]
         );
+
+        Assert::assertInstanceOf(RequestInterface::class, $request);
 
         $signedRequestValidator->validateSignature($request);
     }
@@ -41,6 +49,8 @@ final class SignedRequestValidatorTest extends TestCase
 
         $this->expectException(SignatureVerificationException::class);
         $this->expectExceptionMessage($expectedExceptionMessage);
+
+        Assert::assertInstanceOf(RequestInterface::class, $request);
 
         $signedRequestValidator->validateSignature($request);
     }
@@ -82,16 +92,13 @@ final class SignedRequestValidatorTest extends TestCase
     /**
      * @param array<string> $headers
      */
-    private function createRequest(array $headers = []): RequestInterface
+    private function createRequest(array $headers = []): MessageInterface
     {
         $request = new ServerRequest('post', '/', $headers);
 
         $body = $request->getBody();
         $body->write(self::REQUEST_BODY);
 
-        $requestWithBody = $request->withBody($body);
-        assert($requestWithBody instanceof RequestInterface);
-
-        return $requestWithBody;
+        return $request->withBody($body);
     }
 }

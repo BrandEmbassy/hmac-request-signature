@@ -5,23 +5,24 @@ namespace BrandEmbassy\HmacRequestSignature;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\ServerRequest;
+use GuzzleHttp\Utils;
 use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\TestCase;
+use Psr\Http\Message\MessageInterface;
 use Psr\Http\Message\RequestInterface;
-use function GuzzleHttp\json_encode;
 
 final class RequestSignerMiddlewareTest extends TestCase
 {
     /**
      * @dataProvider requestDataProvider
      */
-    public function testCorrectSignatureHeader(RequestInterface $request, string $expectedSignature): void
+    public function testCorrectSignatureHeader(MessageInterface $request, string $expectedSignature): void
     {
         $requestSignerMiddleware = new RequestSignerMiddleware('random');
 
         $mockHandler = new MockHandler(
             [
-                static function (RequestInterface $request) use ($expectedSignature): void {
+                static function (MessageInterface $request) use ($expectedSignature): void {
                     Assert::assertTrue($request->hasHeader('X-Request-Signature'));
                     Assert::assertSame(
                         $expectedSignature,
@@ -35,18 +36,21 @@ final class RequestSignerMiddlewareTest extends TestCase
         $stack->push($requestSignerMiddleware);
 
         $composed = $stack->resolve();
+
+        Assert::assertInstanceOf(RequestInterface::class, $request);
+
         $composed($request, []);
     }
 
 
     /**
-     * @return array<string, array{request: RequestInterface, expectedSignature: string}>
+     * @return array<string, array{request: MessageInterface, expectedSignature: string}>
      */
     public function requestDataProvider(): array
     {
         return [
             'simple post request' => [
-                'request' => $this->createRequest(json_encode(['foo' => 'bar'])),
+                'request' => $this->createRequest(Utils::jsonEncode(['foo' => 'bar'])),
                 'expectedSignature' => '36HN7juP6erwuhrmZelPH58M9xDaNrImKsDNi3u8Bww=',
             ],
             'simple get request' => [
@@ -57,16 +61,13 @@ final class RequestSignerMiddlewareTest extends TestCase
     }
 
 
-    private function createRequest(string $requestBody): RequestInterface
+    private function createRequest(string $requestBody): MessageInterface
     {
         $request = new ServerRequest('post', '/');
 
         $body = $request->getBody();
         $body->write($requestBody);
 
-        $requestWithBody = $request->withBody($body);
-        assert($requestWithBody instanceof RequestInterface);
-
-        return $requestWithBody;
+        return $request->withBody($body);
     }
 }
